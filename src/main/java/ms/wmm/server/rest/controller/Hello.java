@@ -15,10 +15,10 @@ public class Hello {
 	
 	@RequestMapping("/hello")
 	public String hello(){
-		User user=new User();
+		/*User user=new User();
 		user.setUsername("user");
 		user.setPassword("pass");
-		userRepository.save(user);
+		userRepository.save(user);*/
 		return "Hello";
 	}
 }
