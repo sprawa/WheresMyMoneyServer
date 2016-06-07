@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ms.wmm.server.service.UserService;
 
 @RestController
-public class User {
+public class UserController {
 
 	@Autowired
 	UserService userService;
