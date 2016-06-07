@@ -4,10 +4,9 @@ import org.springframework.data.repository.CrudRepository;
 
 import ms.wmm.server.database.entity.User;
 import java.lang.String;
-import java.util.List;
 
-public interface UserRepository extends CrudRepository<User,Long> {
+public interface UserRepository extends CrudRepository<User,String> {
 
-	List<User> findByUsername(String username);
-	<S extends User> S save(S user);
+	public User findOne(String username);
+	public <S extends User> S save(S user);
 }
