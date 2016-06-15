@@ -29,5 +29,4 @@ public class UserService implements UserDetailsService {
 		User user=new User(username,new BCryptPasswordEncoder().encode(password));
 		userRepository.save(user);
 	}
-
 }
