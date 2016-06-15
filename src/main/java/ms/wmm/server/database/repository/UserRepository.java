@@ -6,7 +6,4 @@ import ms.wmm.server.database.entity.User;
 import java.lang.String;
 
 public interface UserRepository extends CrudRepository<User,String> {
-
-	public User findOne(String username);
-	public <S extends User> S save(S user);
 }

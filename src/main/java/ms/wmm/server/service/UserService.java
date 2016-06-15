@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import ms.wmm.server.database.entity.User;
 import ms.wmm.server.database.repository.UserRepository;
+import ms.wmm.server.exception.UserExistsException;
 
 @Component
 public class UserService implements UserDetailsService {
@@ -23,7 +24,8 @@ public class UserService implements UserDetailsService {
 		else throw new UsernameNotFoundException("Could not find user '"+username+"'");
 	}
 	
-	public void register(String username,String password){
+	public void register(String username,String password) throws UserExistsException{
+		if(userRepository.exists(username)) throw new UserExistsException();
 		User user=new User(username,new BCryptPasswordEncoder().encode(password));
 		userRepository.save(user);
 	}
