@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import ms.wmm.server.database.entity.User;
+import ms.wmm.server.database.entity.UserDB;
 import ms.wmm.server.database.repository.UserRepository;
 import ms.wmm.server.exception.UserExistsException;
 
@@ -19,14 +19,14 @@ public class UserService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user=userRepository.findOne(username);
+		UserDB user=userRepository.findOne(username);
 		if(user!=null) return user;
 		else throw new UsernameNotFoundException("Could not find user '"+username+"'");
 	}
 	
 	public void register(String username,String password) throws UserExistsException{
 		if(userRepository.exists(username)) throw new UserExistsException();
-		User user=new User(username,new BCryptPasswordEncoder().encode(password));
+		UserDB user=new UserDB(username,new BCryptPasswordEncoder().encode(password));
 		userRepository.save(user);
 	}
 }

@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name="user")
-public class User implements UserDetails {
+public class UserDB implements UserDetails {
 	
 	private static final long serialVersionUID = 4586876151030324208L;
 
@@ -23,9 +23,9 @@ public class User implements UserDetails {
 	@Column
 	private String password;
 	
-	public User() {}
+	public UserDB() {}
 	
-	public User(String username,String password){
+	public UserDB(String username,String password){
 		this.username=username;
 		this.password=password;
 	}
