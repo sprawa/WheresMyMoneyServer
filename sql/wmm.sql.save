@@ -1,0 +1,28 @@
+use wmm;user
+
+CREATE TABLE user(
+username varchar(10),
+password varchar(100),
+PRIMARY KEY(username)
+);
+
+CREATE TABLE tr_group(
+id int AUTO_INCREMENT,
+name varchar(10),
+admin varchar(10),
+open varchar(1)
+
+PRIMARY KEY (id),
+FOREIGN KEY(admin) REFERENCES user(username)
+);
+
+CREATE TABLE  user_group(
+id int AUTO_INCREMENT,
+tr_group int,
+user varchar(10),
+accepted varchar(1),
+
+PRIMARY KEY (id),
+FOREIGN KEY(tr_group) REFERENCES tr_group(id),
+FOREIGN KEY(user) REFERENCES user(username)
+);

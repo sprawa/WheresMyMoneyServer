@@ -25,10 +25,13 @@ public class GroupDB {
 	String name;
 	
 	@Column
-	String admin;
+	String admin_id;
+	
+	@Column
+	String open;
 	
 	@ElementCollection
-	@CollectionTable(name="user_group", joinColumns=@JoinColumn(name="groupId"))
+	@CollectionTable(name="user_group", joinColumns=@JoinColumn(name="group_id"))
 	@Column(name="user")
 	Set<String> users;
 
@@ -48,19 +51,27 @@ public class GroupDB {
 		this.name = name;
 	}
 
-	public String getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(String admin) {
-		this.admin = admin;
-	}
-
 	public Set<String> getUsers() {
 		return users;
 	}
 
 	public void setUsers(Set<String> users) {
 		this.users = users;
+	}
+
+	public String getOpen() {
+		return open;
+	}
+
+	public void setOpen(String open) {
+		this.open = open;
+	}
+
+	public String getAdmin_id() {
+		return admin_id;
+	}
+
+	public void setAdmin_id(String admin_id) {
+		this.admin_id = admin_id;
 	}
 }

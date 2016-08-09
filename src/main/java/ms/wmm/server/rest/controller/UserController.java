@@ -30,8 +30,8 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/login", method=RequestMethod.GET)
-	public String getUser(Principal user){
-		return user.getName();
+	public ResponseEntity<String>  getUser(Principal user){
+		return new ResponseEntity<String>(user.getName(), HttpStatus.OK);
 	}
 	
 }
