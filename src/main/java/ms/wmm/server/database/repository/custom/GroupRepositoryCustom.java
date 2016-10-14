@@ -1,4 +1,4 @@
-package ms.wmm.server.database.repository;
+package ms.wmm.server.database.repository.custom;
 
 import java.util.List;
 

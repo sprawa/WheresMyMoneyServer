@@ -8,16 +8,9 @@ import ms.wmm.server.database.repository.UserRepository;
 
 @RestController
 public class Hello {
-
-	@Autowired
-	UserRepository userRepository;
 	
 	@RequestMapping("/hello")
 	public String hello(){
-		/*User user=new User();
-		user.setUsername("user");
-		user.setPassword("pass");
-		userRepository.save(user);*/
 		return "Hello";
 	}
 }

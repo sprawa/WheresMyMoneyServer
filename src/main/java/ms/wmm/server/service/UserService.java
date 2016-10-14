@@ -15,7 +15,7 @@ import ms.wmm.server.exception.UserExistsException;
 public class UserService implements UserDetailsService {
 
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

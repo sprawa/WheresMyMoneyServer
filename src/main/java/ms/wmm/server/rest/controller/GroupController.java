@@ -1,6 +1,5 @@
 package ms.wmm.server.rest.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ms.wmm.server.bo.GroupHead;
 import ms.wmm.server.database.entity.GroupDB;
 import ms.wmm.server.service.GroupService;
 
@@ -18,7 +18,7 @@ import ms.wmm.server.service.GroupService;
 public class GroupController {
 
 	@Autowired
-	GroupService groupService;
+	private GroupService groupService;
 	
 	@RequestMapping(value="/createGroup", method=RequestMethod.POST)
 	public ResponseEntity<Long> createGroup(@RequestParam(value="name") String name){
@@ -27,8 +27,8 @@ public class GroupController {
 	}
 	
 	@RequestMapping(value="/getGroups", method=RequestMethod.GET)
-	public ResponseEntity<List<GroupDB>> getGroups(Principal user){
-		List<GroupDB> groups=groupService.getGroups(user.getName());
-		return new ResponseEntity<List<GroupDB>>(groups,HttpStatus.OK);
+	public ResponseEntity<List<GroupHead>> getGroups(){
+		List<GroupHead> groups=groupService.getGroups();
+		return new ResponseEntity<>(groups,HttpStatus.OK);
 	}
 }

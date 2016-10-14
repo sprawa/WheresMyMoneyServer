@@ -17,7 +17,7 @@ import ms.wmm.server.service.UserService;
 public class UserController {
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public ResponseEntity<Object> register(@RequestParam(value="user") String username, @RequestParam(value="pass") String password){
