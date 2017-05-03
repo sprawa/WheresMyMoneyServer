@@ -11,51 +11,58 @@ import org.springframework.stereotype.Component;
 import ms.wmm.server.bo.Transaction;
 import ms.wmm.server.database.entity.TransactionDB;
 import ms.wmm.server.database.repository.TransactionRepository;
-import ms.wmm.server.exception.TransactionException;
+import ms.wmm.server.database.repository.UserRepository;
+import ms.wmm.server.exception.UserNotFoundException;
 
 @Component
 public class TransactionService {
-	
+
 	@Autowired
 	private TransactionRepository transactionRepository;
-	
-	public List<Transaction> getTransactionsByGroupId(long groupId){
-		String user=SecurityContextHolder.getContext().getAuthentication().getName();
-		List<TransactionDB> dbList=transactionRepository.getByGroupId(user, groupId);
-		List<Transaction> transactions=new ArrayList<Transaction>();
-		for(TransactionDB db:dbList){
-			Transaction tr=getTransactionFromDb(db);
-			if(tr!=null)
-			transactions.add(tr);
+
+	@Autowired
+	private UserRepository userRepository;
+
+	public List<Transaction> getTransactionsByGroupId(long groupId) {
+		String user = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<TransactionDB> dbList = transactionRepository.getByGroupId(user, groupId);
+		List<Transaction> transactions = new ArrayList<Transaction>();
+		for (TransactionDB db : dbList) {
+			Transaction tr = getTransactionFromDb(db);
+			if (tr != null)
+				transactions.add(tr);
 		}
 		return transactions;
 	}
 
-	private Transaction getTransactionFromDb(TransactionDB db){
-		String user=SecurityContextHolder.getContext().getAuthentication().getName();
-		Transaction transaction=new Transaction();
+	private Transaction getTransactionFromDb(TransactionDB db) {
+		String user = SecurityContextHolder.getContext().getAuthentication().getName();
+		Transaction transaction = new Transaction();
 		transaction.setId(db.getId());
 		transaction.setValue(db.getValue());
-		if(db.getLender().equals(user)){
+		transaction.setDesc(db.getDescription());
+		if (db.getLender().equals(user)) {
 			transaction.setUser(db.getBorrower());
 			transaction.setLender(true);
-		}
-		else if(db.getBorrower().equals(user)){
+		} else if (db.getBorrower().equals(user)) {
 			transaction.setUser(db.getLender());
 			transaction.setLender(false);
-		}else{
+		} else {
 			return null;
 		}
 		return transaction;
 	}
-	
-	public void borrow(BigDecimal value,String lender,String description,Long groupId){
-		String user=SecurityContextHolder.getContext().getAuthentication().getName();
-		TransactionDB db=new TransactionDB();
+
+	public void borrow(String value, String lender, String description, Long groupId) throws UserNotFoundException {
+		if (!userRepository.exists(lender))
+			throw new UserNotFoundException();
+		String user = SecurityContextHolder.getContext().getAuthentication().getName();
+		TransactionDB db = new TransactionDB();
 		db.setBorrower(user);
 		db.setDescription(description);
 		db.setGroupId(groupId);
 		db.setLender(lender);
+		db.setValue(new BigDecimal(value));
 		transactionRepository.save(db);
 	}
 }

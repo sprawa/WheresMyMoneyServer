@@ -4,6 +4,7 @@ import java.util.List;
 
 public class GroupHead {
 	
+	private Long id;
 	private String name;
 	private String adminName;
 	private List<String> users;
@@ -47,4 +48,10 @@ public class GroupHead {
 	public void setExitedUsers(List<String> exitedUsers) {
 		this.exitedUsers = exitedUsers;
 	}*/
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 }

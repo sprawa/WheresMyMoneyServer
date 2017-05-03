@@ -18,9 +18,10 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
-	@RequestMapping(value="/register", method=RequestMethod.POST)
-	public ResponseEntity<Object> register(@RequestParam(value="user") String username, @RequestParam(value="pass") String password){
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public ResponseEntity<Object> register(@RequestParam(value = "user") String username,
+			@RequestParam(value = "pass") String password) {
 		try {
 			userService.register(username, password);
 		} catch (UserExistsException e) {
@@ -28,10 +29,9 @@ public class UserController {
 		}
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-	
-	@RequestMapping(value="/login", method=RequestMethod.GET)
-	public ResponseEntity<String>  getUser(Principal user){
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ResponseEntity<String> getUser(Principal user) {
 		return new ResponseEntity<String>(user.getName(), HttpStatus.OK);
 	}
-	
 }
