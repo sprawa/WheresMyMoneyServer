@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ms.wmm.server.bo.GroupHead;
+import ms.wmm.server.bo.Summary;
 import ms.wmm.server.exception.GroupNotFoundException;
 import ms.wmm.server.exception.NotAGroupAdminException;
 import ms.wmm.server.exception.UserNotFoundException;
@@ -77,4 +78,14 @@ public class GroupController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/getSummaries", method = RequestMethod.GET)
+	public ResponseEntity<List<Summary>> getSummaries(@RequestParam(value = "groupId") Long id) {
+		List<Summary> summaries;
+		try {
+			summaries = groupService.getSummaries(id);
+		} catch (GroupNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<List<Summary>>(summaries, HttpStatus.OK);
+	}
 }

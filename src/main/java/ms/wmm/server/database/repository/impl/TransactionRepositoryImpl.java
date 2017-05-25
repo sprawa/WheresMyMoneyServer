@@ -22,5 +22,4 @@ public class TransactionRepositoryImpl implements TransactionRepositoryCustom {
 		query.setParameter("user", user);
 		return query.getResultList();
 	}
-
 }

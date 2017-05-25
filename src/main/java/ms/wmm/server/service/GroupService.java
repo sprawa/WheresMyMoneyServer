@@ -1,13 +1,18 @@
 package ms.wmm.server.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import ms.wmm.server.bo.GroupHead;
+import ms.wmm.server.bo.Summary;
+import ms.wmm.server.bo.Transaction;
 import ms.wmm.server.database.entity.GroupDB;
 import ms.wmm.server.database.entity.GroupUserDB;
 import ms.wmm.server.database.repository.GroupRepository;
@@ -28,6 +33,9 @@ public class GroupService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private TransactionService transactionService;
 
 	public long create(String name) {
 		GroupDB group = new GroupDB();
@@ -124,5 +132,27 @@ public class GroupService {
 		GroupUserDB groupUser = groupUserRepository.findByGroupIdAndUser(groupId, user).get(0);
 		groupUser.setExited("Y");
 		groupUserRepository.save(groupUser);
+	}
+
+	public List<Summary> getSummaries(Long groupId) throws GroupNotFoundException {
+		if (!groupRepository.exists(groupId))
+			throw new GroupNotFoundException();
+		List<Transaction> transactions = transactionService.getTransactionsByGroupId(groupId);
+		Map<String, Summary> summaryMap = new HashMap<String, Summary>();
+		for (Transaction transaction : transactions) {
+			if (!summaryMap.containsKey(transaction.getUser()))
+				summaryMap.put(transaction.getUser(), new Summary(transaction.getUser()));
+			Summary summary = summaryMap.get(transaction.getUser());
+			if (transaction.isLender())
+				summary.add(transaction.getValue());
+			else
+				summary.subtract(transaction.getValue());
+		}
+		List<Summary> summaries = new ArrayList<>(summaryMap.values());
+		for (Summary summary : summaries) {
+			if (summary.getValue().equals(BigDecimal.ZERO))
+				summaries.remove(summary);
+		}
+		return summaries;
 	}
 }

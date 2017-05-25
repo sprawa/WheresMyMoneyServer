@@ -9,6 +9,11 @@ public class Summary {
 	private BigDecimal value;
 	private List<Transaction> transactions;
 
+	public Summary(String user) {
+		this.user = user;
+		this.value = BigDecimal.ZERO;
+	}
+
 	public String getUser() {
 		return user;
 	}
@@ -21,15 +26,19 @@ public class Summary {
 		return value;
 	}
 
-	public void setValue(BigDecimal value) {
-		this.value = value;
-	}
-
 	public List<Transaction> getTransactions() {
 		return transactions;
 	}
 
 	public void setTransactions(List<Transaction> transactions) {
 		this.transactions = transactions;
+	}
+
+	public void add(BigDecimal augend) {
+		this.value = value.add(augend);
+	}
+
+	public void subtract(BigDecimal subtrahend) {
+		this.value = value.subtract(subtrahend);
 	}
 }
