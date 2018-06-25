@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 
 import ms.wmm.server.bo.Transaction;
 import ms.wmm.server.database.entity.TransactionDB;
+import ms.wmm.server.database.repository.GroupRepository;
 import ms.wmm.server.database.repository.TransactionRepository;
 import ms.wmm.server.database.repository.UserRepository;
+import ms.wmm.server.exception.GroupNotFoundException;
 import ms.wmm.server.exception.UserNotFoundException;
 
 @Component
@@ -23,7 +25,12 @@ public class TransactionService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public List<Transaction> getTransactionsByGroupId(long groupId) {
+	@Autowired
+	private GroupRepository groupRepository;
+
+	public List<Transaction> getTransactionsByGroupId(long groupId) throws GroupNotFoundException {
+		if (!groupRepository.exists(groupId))
+			throw new GroupNotFoundException();
 		String user = SecurityContextHolder.getContext().getAuthentication().getName();
 		List<TransactionDB> dbList = transactionRepository.getByGroupId(user, groupId);
 		List<Transaction> transactions = new ArrayList<Transaction>();
@@ -53,9 +60,12 @@ public class TransactionService {
 		return transaction;
 	}
 
-	public void borrow(String value, String lender, String description, Long groupId) throws UserNotFoundException {
+	public void borrow(String value, String lender, String description, Long groupId)
+			throws UserNotFoundException, GroupNotFoundException {
 		if (!userRepository.exists(lender))
 			throw new UserNotFoundException();
+		if (!groupRepository.exists(groupId))
+			throw new GroupNotFoundException();
 		String user = SecurityContextHolder.getContext().getAuthentication().getName();
 		TransactionDB db = new TransactionDB();
 		db.setBorrower(user);

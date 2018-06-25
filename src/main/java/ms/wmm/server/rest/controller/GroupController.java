@@ -26,7 +26,7 @@ public class GroupController {
 	@RequestMapping(value = "/createGroup", method = RequestMethod.POST)
 	public ResponseEntity<Long> createGroup(@RequestParam(value = "name") String name) {
 		long id = groupService.create(name);
-		return new ResponseEntity<Long>(new Long(id), HttpStatus.OK);
+		return new ResponseEntity<Long>(new Long(id), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/getGroups", method = RequestMethod.GET)

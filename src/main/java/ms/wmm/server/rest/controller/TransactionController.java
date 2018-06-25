@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ms.wmm.server.bo.Transaction;
+import ms.wmm.server.exception.GroupNotFoundException;
 import ms.wmm.server.exception.UserNotFoundException;
 import ms.wmm.server.service.TransactionService;
 
@@ -22,7 +23,12 @@ public class TransactionController {
 
 	@RequestMapping(value = "/getTransactions", method = RequestMethod.GET)
 	public ResponseEntity<List<Transaction>> getTransactions(@RequestParam(value = "groupId") Long groupId) {
-		List<Transaction> transactions = transactionService.getTransactionsByGroupId(groupId);
+		List<Transaction> transactions;
+		try {
+			transactions = transactionService.getTransactionsByGroupId(groupId);
+		} catch (GroupNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity<List<Transaction>>(transactions, HttpStatus.OK);
 	}
 
@@ -34,6 +40,8 @@ public class TransactionController {
 			transactionService.borrow(value, lender, description, groupId);
 		} catch (UserNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		} catch (GroupNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
